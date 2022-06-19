@@ -11,7 +11,6 @@ import javax.jms.ObjectMessage;
 import agentmanager.AgentManagerRemote;
 import agents.IAgent;
 import agents.AID;
-import agents.CachedAgentsRemote;
 
 /**
  * Message-Driven Bean implementation class for: MDBConsumer
@@ -21,8 +20,6 @@ import agents.CachedAgentsRemote;
 		@ActivationConfigProperty(propertyName = "destination", propertyValue = "jms/topic/publicTopic") })
 public class MDBConsumer implements MessageListener {
 
-	@EJB
-	private CachedAgentsRemote cachedAgents;
 	@EJB
 	private AgentManagerRemote agentManager;
 
@@ -43,10 +40,10 @@ public class MDBConsumer implements MessageListener {
 		} catch (JMSException e) {
 			e.printStackTrace();
 		}
-		AID receiver;
-		receiver = (AID) aclMessage.userArgs.get("receiver");
-		IAgent agent = (IAgent) agentManager.getAgentById(receiver);
-		agent.handleMessage(aclMessage);
+		for (AID receiver : aclMessage.receivers) {
+			IAgent agent = (IAgent) agentManager.getAgentById(receiver);
+			agent.handleMessage(aclMessage);
+		}
 	}
 
 }

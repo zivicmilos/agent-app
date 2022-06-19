@@ -10,6 +10,7 @@ import javax.ejb.Stateful;
 import chatmanager.ChatManagerRemote;
 import messagemanager.ACLMessage;
 import messagemanager.MessageManagerRemote;
+import messagemanager.Performative;
 import models.User;
 import models.UserMessage;
 import util.JNDILookup;
@@ -38,16 +39,10 @@ public class ChatAgent extends Agent {
 
 	@Override
 	public void handleMessage(ACLMessage message) {
-		// TextMessage tmsg = (TextMessage) message;
-
-		AID receiver;
-		receiver = (AID) message.userArgs.get("receiver");
-		if (agentId.equals(receiver)) {
-			String option = "";
+		if (message.receivers.contains(agentId)) {
 			String response = "";
-			option = (String) message.userArgs.get("command");
-			switch (option) {
-			case "REGISTER":
+			switch (message.performative) {
+			case REGISTER:
 				String username = (String) message.userArgs.get("username");
 				String password = (String) message.userArgs.get("password");
 
@@ -55,14 +50,14 @@ public class ChatAgent extends Agent {
 
 				response = "REGISTER!Registered: " + (result ? "Yes!" : "No!");
 				break;
-			case "LOG_IN":
+			case LOG_IN:
 				username = (String) message.userArgs.get("username");
 				password = (String) message.userArgs.get("password");
 				result = chatManager.login(username, password);
 
 				response = "LOG_IN!Logged in: " + (result ? "Yes!" : "No!");
 				break;
-			case "GET_REGISTERED":
+			case GET_REGISTERED:
 				response = "REGISTERED!";
 				List<User> registeredUsers = chatManager.registeredUsers();
 				for (User u : registeredUsers) {
@@ -74,7 +69,7 @@ public class ChatAgent extends Agent {
 				}
 
 				break;
-			case "GET_LOGGEDIN":
+			case GET_LOGGEDIN:
 				response = "LOGGEDIN!";
 				List<User> loggedinUsers = chatManager.loggedInUsers();
 				for (User u : loggedinUsers) {
@@ -86,7 +81,7 @@ public class ChatAgent extends Agent {
 				}
 
 				break;
-			case "GET_MESSAGES":
+			case GET_MESSAGES:
 				username = (String) message.userArgs.get("username");
 				if (username.equals("all")) {
 					for (User u : chatManager.registeredUsers()) {
@@ -108,13 +103,11 @@ public class ChatAgent extends Agent {
 					ws.onMessage((String) message.userArgs.get("username"), response);
 				}
 				break;
-			case "x":
-				break;
 			default:
-				response = "ERROR!Option: " + option + " does not exist.";
+				response = "ERROR!Option: " + message.performative + " does not exist.";
 				break;
 			}
-			if (!(option.equals("GET_REGISTERED") || option.equals("GET_LOGGEDIN") || option.equals("GET_MESSAGES"))) {
+			if (!(message.performative == Performative.GET_REGISTERED || message.performative == Performative.GET_LOGGEDIN || message.performative == Performative.GET_MESSAGES)) {
 				System.out.println(response);
 				ws.onMessage((String) message.userArgs.get("username"), response);
 			}

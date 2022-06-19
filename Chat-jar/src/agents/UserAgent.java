@@ -27,16 +27,10 @@ public class UserAgent extends Agent {
 
 	@Override
 	public void handleMessage(ACLMessage message) {
-		// TextMessage tmsg = (TextMessage) message;
-
-		AID receiver;
-		receiver = (AID) message.userArgs.get("receiver");
-		if (agentId.equals(receiver)) {
-			String option = "";
+		if (message.receivers.contains(agentId)) {
 			String response = "";
-			option = (String) message.userArgs.get("command");
-			switch (option) {
-			case "LOGOUT":
+			switch (message.performative) {
+			case LOGOUT:
 				System.out.println("Logged users:");
 				for (User u : chatManager.loggedInUsers())
 					System.out.println(u.getUsername());
@@ -46,7 +40,7 @@ public class UserAgent extends Agent {
 				response = "LOGGEDOUT!Logged out: " + (result ? "Yes!" : "No!");
 
 				break;
-			case "SEND_MESSAGE":
+			case SEND_MESSAGE:
 				String messageReceiver = (String) message.userArgs.get("messageReceiver");
 				String messageSender = (String) message.userArgs.get("messageSender");
 				String messageSubject = (String) message.userArgs.get("messageSubject");
@@ -57,7 +51,7 @@ public class UserAgent extends Agent {
 				response = "SENT!Message sent: " + (result ? "Yes!" : "No!");
 
 				break;
-			case "SEND_MESSAGE_TO_ALL":
+			case SEND_MESSAGE_TO_ALL:
 				messageSender = (String) message.userArgs.get("messageSender");
 				messageSubject = (String) message.userArgs.get("messageSubject");
 				messageContent = (String) message.userArgs.get("messageContent");
@@ -67,10 +61,8 @@ public class UserAgent extends Agent {
 				response = "SENT_TO_ALL!Message sent to all: " + (result ? "Yes!" : "No!");
 
 				break;
-			case "x":
-				break;
 			default:
-				response = "ERROR!Option: " + option + " does not exist.";
+				response = "ERROR!Option: " + message.performative + " does not exist.";
 				break;
 			}
 			System.out.println(response);
