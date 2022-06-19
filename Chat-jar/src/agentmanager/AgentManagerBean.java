@@ -45,9 +45,10 @@ public class AgentManagerBean implements AgentManagerRemote {
 	@Override
 	public List<AgentType> getAgentTypes() {
 		List<AgentType> agentTypes = new ArrayList<>();
-		agentTypes.add(new AgentType("chat"));
-		agentTypes.add(new AgentType("user"));
-		//return new ArrayList<AgentType>() {{ add(new AgentType("chat")); add(new AgentType("user")); }};
+		for (AID aid : cachedAgents.getRunningAgents().keySet()) {
+			if (!agentTypes.contains(aid.getType()))
+				agentTypes.add(aid.getType());
+		}
 		return agentTypes;
 	}
 

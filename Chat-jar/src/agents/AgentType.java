@@ -1,6 +1,7 @@
 package agents;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class AgentType implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -21,6 +22,11 @@ public class AgentType implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(name);
 	}
 
 	@Override

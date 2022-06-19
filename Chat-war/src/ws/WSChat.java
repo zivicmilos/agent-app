@@ -6,6 +6,7 @@ import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.ejb.EJB;
 import javax.ejb.Singleton;
 import javax.websocket.OnClose;
 import javax.websocket.OnError;
@@ -19,11 +20,15 @@ import agentmanager.AgentManagerRemote;
 import agents.AID;
 import agents.AgentType;
 import models.AgentCenter;
+import rest.AgentRest;
 import util.JNDILookup;
 
 @Singleton
 @ServerEndpoint("/ws/{username}")
 public class WSChat {
+	@EJB
+	AgentRest agentRest;
+	
 	private AgentManagerRemote agentManager = JNDILookup.lookUp(JNDILookup.AgentManagerLookup, AgentManagerBean.class);
 	private Map<String, Session> sessions = new HashMap<String, Session>();
 	
@@ -34,9 +39,10 @@ public class WSChat {
 		try {
 			AID aid = new AID(username, new AgentCenter(InetAddress.getLocalHost().getHostName(), InetAddress.getLocalHost().getHostAddress()) , new AgentType("user"));
 			AID aid2 = new AID(username, new AgentCenter(InetAddress.getLocalHost().getHostName(), InetAddress.getLocalHost().getHostAddress()), new AgentType("chat"));
-			boolean b = aid.equals(aid2);
-			if (!aid2.equals(new AID("chat", new AgentCenter(InetAddress.getLocalHost().getHostName(), InetAddress.getLocalHost().getHostAddress()) , new AgentType("chat"))) && agentManager.getAgentById(aid) == null)
+			if (!aid2.equals(new AID("chat", new AgentCenter(InetAddress.getLocalHost().getHostName(), InetAddress.getLocalHost().getHostAddress()) , new AgentType("chat"))) && agentManager.getAgentById(aid) == null) {
 				agentManager.startAgent(JNDILookup.UserAgentLookup, aid);
+				agentRest.getRunningAgents();
+			}
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}

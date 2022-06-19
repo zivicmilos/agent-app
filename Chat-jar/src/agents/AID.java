@@ -1,6 +1,7 @@
 package agents;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 import models.AgentCenter;
 
@@ -43,6 +44,11 @@ public class AID implements Serializable{
 
 	public void setType(AgentType type) {
 		this.type = type;
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(name, agentCenter, type);
 	}
 
 	@Override

@@ -19,19 +19,17 @@
             users</button>
     </div>
     <div>
-        <table *ngIf="users?.length">
+        <table *ngIf="users?.length" class="table"  style="width: 50%">
             <thead>
                 <tr>
-                    <th>Username</th>
-                    <th>Password</th>
-                    <th>Agent center name</th>
-                    <th>Agent center address</th>
+                    <th style="width: 33%">Username</th>
+                    <th style="width: 33%">Agent center name</th>
+                    <th style="width: 33%">Agent center address</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let u of users">
                     <td>{{u.username}}</td>
-                    <td>{{u.password}}</td>
                     <td>{{u.agentCenter.alias}}</td>
                     <td>{{u.agentCenter.address}}</td>
                 </tr>
@@ -44,19 +42,17 @@
             users</button>
     </div>
     <div>
-        <table *ngIf="loggedinUsers?.length">
+        <table *ngIf="loggedinUsers?.length" class="table"  style="width: 50%">
             <thead>
                 <tr>
-                    <th>Username</th>
-                    <th>Password</th>
-                    <th>Agent center name</th>
-                    <th>Agent center address</th>
+                    <th style="width: 33%">Username</th>
+                    <th style="width: 33%">Agent center name</th>
+                    <th style="width: 33%">Agent center address</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let u of loggedinUsers">
                     <td>{{u.username}}</td>
-                    <td>{{u.password}}</td>
                     <td>{{u.agentCenter.alias}}</td>
                     <td>{{u.agentCenter.address}}</td>
                 </tr>

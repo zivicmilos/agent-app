@@ -19,3 +19,45 @@
         </tbody>
     </table>
 </div>
+
+<br>
+<div>
+    <button type="button" class="btn btn-primary btn-block mb-4" (click)="getRunningAgents()">List of running
+        agents</button>
+</div>
+<div>
+    <table *ngIf="runningAgents?.length" class="table" style="width: 70%">
+        <thead>
+            <tr>
+                <th style="width: 15%">Agent name</th>
+                <th style="width: 15%">Agent center address</th>
+                <th style="width: 15%">Agent center name</th>
+                <th style="width: 15%">Agent type</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let ra of runningAgents">
+                <td>{{ra.name}}</td>
+                <td>{{ra.agentCenter.address}}</td>
+                <td>{{ra.agentCenter.alias}}</td>
+                <td>{{ra.type.name}}</td>
+                <td><button type="button" class="btn btn-danger btn-block mb-4" (click)="stopAgent(ra)">Stop agent</button></td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<br>
+<div>
+    <div class="row">
+        <div class="col-sm">
+            <input name="name" type="text" id="name" placeholder="Agent name" [(ngModel)]="name" />
+        </div>
+        <div class="col-sm">
+            <input name="type" type="text" id="type" placeholder="Agent type" [(ngModel)]="type" />
+        </div>
+        <div class="col-sm">
+            <button type="button" class="btn btn-primary btn-block mb-4" (click)="runAgent()">Run agent</button>
+        </div>
+    </div>
+</div>

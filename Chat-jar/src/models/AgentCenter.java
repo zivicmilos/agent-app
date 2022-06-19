@@ -1,6 +1,7 @@
 package models;
 
 import java.io.Serializable;
+import java.util.Objects;
 
 public class AgentCenter implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -31,6 +32,11 @@ public class AgentCenter implements Serializable {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(address, alias);
 	}
 
 	@Override
