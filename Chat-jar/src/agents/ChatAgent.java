@@ -57,6 +57,13 @@ public class ChatAgent extends Agent {
 
 				response = "LOG_IN!Logged in: " + (result ? "Yes!" : "No!");
 				break;
+			case ADMIN_LOG_IN:
+				username = (String) message.userArgs.get("username");
+				password = (String) message.userArgs.get("password");
+				result = chatManager.adminLogin(username, password);
+
+				response = "ADMIN_LOG_IN!Logged in: " + (result ? "Yes!" : "No!");
+				break;
 			case GET_REGISTERED:
 				response = "REGISTERED!";
 				List<User> registeredUsers = chatManager.registeredUsers();

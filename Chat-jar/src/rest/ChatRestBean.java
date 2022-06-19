@@ -73,6 +73,21 @@ public class ChatRestBean implements ChatRest {
 	}
 	
 	@Override
+	public void adminLogin(User user) {
+		ACLMessage message = new ACLMessage();
+		try {
+			message.receivers.add(new AID("chat", new AgentCenter(InetAddress.getLocalHost().getHostName(), InetAddress.getLocalHost().getHostAddress()), new AgentType("chat")));
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+		}
+		message.performative = Performative.ADMIN_LOG_IN;
+		message.userArgs.put("username", user.getUsername());
+		message.userArgs.put("password", user.getPassword());
+		
+		messageManager.post(message);
+	}
+	
+	@Override
 	public void getRegisteredUsers() {
 		ACLMessage message = new ACLMessage();
 		try {
@@ -189,5 +204,4 @@ public class ChatRestBean implements ChatRest {
 		getMessages("all");
 		
 	}
-
 }

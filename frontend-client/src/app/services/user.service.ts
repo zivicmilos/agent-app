@@ -59,4 +59,8 @@ export class UserService {
     return JSON.parse(ss);
   }
 
+  adminLogin(user: User) {
+    return this.http.post(this.baseUrl + 'users/adminLogin', user).subscribe();
+  }
+
 }

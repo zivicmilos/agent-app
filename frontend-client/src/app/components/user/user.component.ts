@@ -25,8 +25,8 @@ export class UserComponent implements OnInit {
 
   ngOnInit(): void {
     this.currentUser = this.userService.getCurrentUser();
-    this.connection = new WebSocket("ws://localhost:8080/Chat-war/ws/"+this.currentUser.username);
-    console.log("ws://localhost:8080/Chat-war/ws/"+this.currentUser.username);
+    this.connection = new WebSocket("ws://localhost:8080/Chat-war/ws/" + this.currentUser.username);
+    console.log("ws://localhost:8080/Chat-war/ws/" + this.currentUser.username);
     this.initSocket();
   }
 
@@ -74,7 +74,7 @@ export class UserComponent implements OnInit {
         data[1].split("|").forEach((userMessage: string) => {
           if (userMessage) {
             let userMessageData = userMessage.split(",");
-            this.messages.push(new UserMessage(new User(userMessageData[0], ''), new User(userMessageData[1], ''), 
+            this.messages.push(new UserMessage(new User(userMessageData[0], ''), new User(userMessageData[1], ''),
               new Date(Date.parse(userMessageData[2])), userMessageData[3], userMessageData[4]));
           }
         });
@@ -96,8 +96,6 @@ export class UserComponent implements OnInit {
 
   logout() {
     this.userService.logout(this.currentUser);
-    //this.router.navigate(['/home']);
-    //this.connection.close();
   }
 
   getMessages() {

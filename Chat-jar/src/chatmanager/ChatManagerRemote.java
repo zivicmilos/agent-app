@@ -11,12 +11,16 @@ import models.UserMessage;
 public interface ChatManagerRemote {
 
 	public boolean login(String username, String password);
+	
+	public boolean adminLogin(String username, String password);
 
 	public boolean register(User user);
 	
 	public List<User> registeredUsers();
 
 	public List<User> loggedInUsers();
+	
+	List<User> getAdmins();
 	
 	public boolean logout(String username);
 	

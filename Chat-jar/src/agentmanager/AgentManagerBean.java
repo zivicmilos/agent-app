@@ -1,5 +1,7 @@
 package agentmanager;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.ejb.EJB;
@@ -8,6 +10,7 @@ import javax.ejb.Stateless;
 
 import agents.IAgent;
 import agents.AID;
+import agents.AgentType;
 import agents.CachedAgentsRemote;
 import util.JNDILookup;
 
@@ -37,6 +40,15 @@ public class AgentManagerBean implements AgentManagerRemote {
 			if (a.getKey().equals(agentId))
 				return a.getValue();
 		return null;
+	}
+
+	@Override
+	public List<AgentType> getAgentTypes() {
+		List<AgentType> agentTypes = new ArrayList<>();
+		agentTypes.add(new AgentType("chat"));
+		agentTypes.add(new AgentType("user"));
+		//return new ArrayList<AgentType>() {{ add(new AgentType("chat")); add(new AgentType("user")); }};
+		return agentTypes;
 	}
 
 }

@@ -24,6 +24,11 @@ public interface ChatRest {
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void login(User user);
 	
+	@POST
+	@Path("/users/adminLogin")
+	@Consumes(MediaType.APPLICATION_JSON)
+	public void adminLogin(User user);
+	
 	@GET
 	@Path("/users/registered")
 	public void getRegisteredUsers();

@@ -51,6 +51,13 @@ export class HomeComponent implements OnInit {
           this.router.navigate(['/user']);
         }
       }
+      else if (data[0] === "ADMIN_LOG_IN") {
+        this.toastr.success(data[1]);
+        if (data[1].split(":")[1].trim() === "Yes") {
+          this.userService.setCurrentUser(this.user);
+          this.router.navigate(['/admin']);
+        }
+      }
       else {
         this.toastr.success(data[1]);
       }
@@ -70,6 +77,12 @@ export class HomeComponent implements OnInit {
     this.connection = new WebSocket("ws://localhost:8080/Chat-war/ws/"+this.user.username);
     this.initSocket();
     this.userService.login(this.user);
+  }
+
+  adminLogin() {
+    this.connection = new WebSocket("ws://localhost:8080/Chat-war/ws/"+this.user.username);
+    this.initSocket();
+    this.userService.adminLogin(this.user);
   }
 
 }

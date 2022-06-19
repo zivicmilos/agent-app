@@ -3,6 +3,7 @@ package messagemanager;
 public enum Performative {
 	REGISTER,
 	LOG_IN,
+	ADMIN_LOG_IN,
 	GET_REGISTERED,
 	GET_LOGGEDIN,
 	LOGOUT,

@@ -25,6 +25,7 @@ public class ChatManagerBean implements ChatManagerRemote, ChatManagerLocal {
 
 	private static List<User> registered = new ArrayList<User>();
 	private static List<User> loggedIn = new ArrayList<User>();
+	private static List<User> admins = new ArrayList<User>();
 	private static HashMap<String, List<UserMessage>> messages = new HashMap<String, List<UserMessage>>();
 	
 	/**
@@ -34,6 +35,8 @@ public class ChatManagerBean implements ChatManagerRemote, ChatManagerLocal {
 		/*List<UserMessage> lista = new ArrayList<>();
 		lista.add(new UserMessage(new User("asd", "asd"), new User("pera", "pera"), LocalDateTime.now(), "poruka", "admebloksam"));
 		messages.put("asd", lista);*/
+		
+		admins.add(new User("admin", "admin", new AgentCenter()));
 	}
 
 	@Override
@@ -67,6 +70,12 @@ public class ChatManagerBean implements ChatManagerRemote, ChatManagerLocal {
 	}
 	
 	@Override
+	public boolean adminLogin(String username, String password) {
+		boolean exists = admins.stream().anyMatch(u->u.getUsername().equals(username) && u.getPassword().equals(password));
+		return exists;
+	}
+	
+	@Override
 	public List<User> registeredUsers() {
 		return registered;
 	}
@@ -74,6 +83,11 @@ public class ChatManagerBean implements ChatManagerRemote, ChatManagerLocal {
 	@Override
 	public List<User> loggedInUsers() {
 		return loggedIn;
+	}
+	
+	@Override
+	public List<User> getAdmins() {
+		return admins;
 	}
 	
 	@Override
