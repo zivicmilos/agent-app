@@ -1,6 +1,8 @@
 package ws;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -14,6 +16,9 @@ import javax.websocket.server.ServerEndpoint;
 
 import agentmanager.AgentManagerBean;
 import agentmanager.AgentManagerRemote;
+import agents.AID;
+import agents.AgentType;
+import models.AgentCenter;
 import util.JNDILookup;
 
 @Singleton
@@ -26,8 +31,15 @@ public class WSChat {
 	public void onOpen(@PathParam("username") String username, Session session) {
 		System.out.println(username);
 		sessions.put(username, session);
-		if (!username.equals("chat") && agentManager.getAgentById(username) == null)
-			agentManager.startAgent(JNDILookup.UserAgentLookup, username);
+		try {
+			AID aid = new AID(username, new AgentCenter(InetAddress.getLocalHost().getHostName(), InetAddress.getLocalHost().getHostAddress()) , new AgentType("user"));
+			AID aid2 = new AID(username, new AgentCenter(InetAddress.getLocalHost().getHostName(), InetAddress.getLocalHost().getHostAddress()), new AgentType("chat"));
+			boolean b = aid.equals(aid2);
+			if (!aid2.equals(new AID("chat", new AgentCenter(InetAddress.getLocalHost().getHostName(), InetAddress.getLocalHost().getHostAddress()) , new AgentType("chat"))) && agentManager.getAgentById(aid) == null)
+				agentManager.startAgent(JNDILookup.UserAgentLookup, aid);
+		} catch (UnknownHostException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@OnClose

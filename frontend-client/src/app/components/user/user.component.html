@@ -24,16 +24,16 @@
                 <tr>
                     <th>Username</th>
                     <th>Password</th>
-                    <th>Host name</th>
-                    <th>Host address</th>
+                    <th>Agent center name</th>
+                    <th>Agent center address</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let u of users">
                     <td>{{u.username}}</td>
                     <td>{{u.password}}</td>
-                    <td>{{u.host.alias}}</td>
-                    <td>{{u.host.address}}</td>
+                    <td>{{u.agentCenter.alias}}</td>
+                    <td>{{u.agentCenter.address}}</td>
                 </tr>
             </tbody>
         </table>
@@ -49,16 +49,16 @@
                 <tr>
                     <th>Username</th>
                     <th>Password</th>
-                    <th>Host name</th>
-                    <th>Host address</th>
+                    <th>Agent center name</th>
+                    <th>Agent center address</th>
                 </tr>
             </thead>
             <tbody>
                 <tr *ngFor="let u of loggedinUsers">
                     <td>{{u.username}}</td>
                     <td>{{u.password}}</td>
-                    <td>{{u.host.alias}}</td>
-                    <td>{{u.host.address}}</td>
+                    <td>{{u.agentCenter.alias}}</td>
+                    <td>{{u.agentCenter.address}}</td>
                 </tr>
             </tbody>
         </table>

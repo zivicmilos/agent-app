@@ -1,12 +1,23 @@
 package agents;
 
-import java.io.Serializable;
+import javax.ejb.EJB;
 
-import javax.jms.Message;
+public abstract class Agent implements IAgent {
+	private static final long serialVersionUID = 1L;
+	@EJB
+	private CachedAgentsRemote cachedAgents;
+	protected AID agentId;
 
-public interface Agent extends Serializable {
+	@Override
+	public AID init(AID id) {
+		agentId = id;
+		cachedAgents.addRunningAgent(agentId, this);
+		return agentId;
+	}
 
-	public String init(String id);
-	public void handleMessage(Message message);
-	public String getAgentId();
+	@Override
+	public AID getAgentId() {
+		return agentId;
+	}
+
 }

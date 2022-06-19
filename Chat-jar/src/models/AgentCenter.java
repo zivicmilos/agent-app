@@ -2,16 +2,16 @@ package models;
 
 import java.io.Serializable;
 
-public class Host implements Serializable {
+public class AgentCenter implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String alias;
 	private String address;
 	
-	public Host() {
+	public AgentCenter() {
 		super();
 	}
 
-	public Host(String alias, String address) {
+	public AgentCenter(String alias, String address) {
 		super();
 		this.alias = alias;
 		this.address = address;
@@ -32,5 +32,18 @@ public class Host implements Serializable {
 	public void setAddress(String address) {
 		this.address = address;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		AgentCenter other = (AgentCenter) obj;
+		return alias.equals(other.alias);
+	}
+	
 	
 }

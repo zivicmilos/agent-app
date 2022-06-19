@@ -4,28 +4,19 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.ejb.Remote;
 import javax.ejb.Stateful;
-import javax.jms.JMSException;
-import javax.jms.Message;
-import javax.jms.TextMessage;
 
 import chatmanager.ChatManagerRemote;
+import messagemanager.ACLMessage;
 import models.User;
 import ws.WSChat;
 
-
 @Stateful
-@Remote(Agent.class)
-public class UserAgent implements Agent {
+@Remote(IAgent.class)
+public class UserAgent extends Agent {
 
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
-	private String agentId;
 	@EJB
 	private ChatManagerRemote chatManager;
-	@EJB
-	private CachedAgentsRemote cachedAgents;
 	@EJB
 	private WSChat ws;
 
@@ -35,76 +26,55 @@ public class UserAgent implements Agent {
 	}
 
 	@Override
-	public void handleMessage(Message message) {
-		TextMessage tmsg = (TextMessage) message;
+	public void handleMessage(ACLMessage message) {
+		// TextMessage tmsg = (TextMessage) message;
 
-		String receiver;
-		try {
-			receiver = (String) tmsg.getObjectProperty("receiver");
-			if (agentId.equals(receiver)) {
-				String option = "";
-				String response = "";
-				try {
-					option = (String) tmsg.getObjectProperty("command");
-					switch (option) {
-					case "LOGOUT":
-						System.out.println("Logged users:");
-						for (User u : chatManager.loggedInUsers())
-							System.out.println(u.getUsername());
-						String username = (String) tmsg.getObjectProperty("username");
-						boolean result = chatManager.logout(username);
+		AID receiver;
+		receiver = (AID) message.userArgs.get("receiver");
+		if (agentId.equals(receiver)) {
+			String option = "";
+			String response = "";
+			option = (String) message.userArgs.get("command");
+			switch (option) {
+			case "LOGOUT":
+				System.out.println("Logged users:");
+				for (User u : chatManager.loggedInUsers())
+					System.out.println(u.getUsername());
+				String username = (String) message.userArgs.get("username");
+				boolean result = chatManager.logout(username);
 
-						response = "LOGGEDOUT!Logged out: " + (result ? "Yes!" : "No!");
+				response = "LOGGEDOUT!Logged out: " + (result ? "Yes!" : "No!");
 
-						break;
-					case "SEND_MESSAGE":
-						String messageReceiver = (String) tmsg.getObjectProperty("messageReceiver");
-						String messageSender = (String) tmsg.getObjectProperty("messageSender");
-						String messageSubject = (String) tmsg.getObjectProperty("messageSubject");
-						String messageContent = (String) tmsg.getObjectProperty("messageContent");
+				break;
+			case "SEND_MESSAGE":
+				String messageReceiver = (String) message.userArgs.get("messageReceiver");
+				String messageSender = (String) message.userArgs.get("messageSender");
+				String messageSubject = (String) message.userArgs.get("messageSubject");
+				String messageContent = (String) message.userArgs.get("messageContent");
 
-						result = chatManager.send(messageReceiver, messageSender, messageSubject, messageContent);
+				result = chatManager.send(messageReceiver, messageSender, messageSubject, messageContent);
 
-						response = "SENT!Message sent: " + (result ? "Yes!" : "No!");
+				response = "SENT!Message sent: " + (result ? "Yes!" : "No!");
 
-						break;
-					case "SEND_MESSAGE_TO_ALL":
-						messageSender = (String) tmsg.getObjectProperty("messageSender");
-						messageSubject = (String) tmsg.getObjectProperty("messageSubject");
-						messageContent = (String) tmsg.getObjectProperty("messageContent");
+				break;
+			case "SEND_MESSAGE_TO_ALL":
+				messageSender = (String) message.userArgs.get("messageSender");
+				messageSubject = (String) message.userArgs.get("messageSubject");
+				messageContent = (String) message.userArgs.get("messageContent");
 
-						result = chatManager.sendToAll(messageSender, messageSubject, messageContent);
+				result = chatManager.sendToAll(messageSender, messageSubject, messageContent);
 
-						response = "SENT_TO_ALL!Message sent to all: " + (result ? "Yes!" : "No!");
+				response = "SENT_TO_ALL!Message sent to all: " + (result ? "Yes!" : "No!");
 
-						break;
-					case "x":
-						break;
-					default:
-						response = "ERROR!Option: " + option + " does not exist.";
-						break;
-					}
-					System.out.println(response);
-					ws.onMessage((String) tmsg.getObjectProperty("username"), response);
-
-				} catch (JMSException e) {
-					e.printStackTrace();
-				}
+				break;
+			case "x":
+				break;
+			default:
+				response = "ERROR!Option: " + option + " does not exist.";
+				break;
 			}
-		} catch (JMSException e) {
-			e.printStackTrace();
+			System.out.println(response);
+			ws.onMessage((String) message.userArgs.get("username"), response);
 		}
-	}
-
-	@Override
-	public String init(String id) {
-		agentId = id;
-		cachedAgents.addRunningAgent(agentId, this);
-		return agentId;
-	}
-
-	@Override
-	public String getAgentId() {
-		return agentId;
 	}
 }

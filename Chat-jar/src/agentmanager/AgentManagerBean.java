@@ -1,10 +1,13 @@
 package agentmanager;
 
+import java.util.Map;
+
 import javax.ejb.EJB;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateless;
 
-import agents.Agent;
+import agents.IAgent;
+import agents.AID;
 import agents.CachedAgentsRemote;
 import util.JNDILookup;
 
@@ -23,14 +26,17 @@ public class AgentManagerBean implements AgentManagerRemote {
     }
 
 	@Override
-	public String startAgent(String name, String agentId) {
-		Agent agent = (Agent) JNDILookup.lookUp(name, Agent.class);
+	public AID startAgent(String name, AID agentId) {
+		IAgent agent = (IAgent) JNDILookup.lookUp(name, IAgent.class);
 		return agent.init(agentId);
 	}
 
 	@Override
-	public Agent getAgentById(String agentId) {
-		return cachedAgents.getRunningAgents().get(agentId);
+	public IAgent getAgentById(AID agentId) {
+		for (Map.Entry<AID, IAgent> a : cachedAgents.getRunningAgents().entrySet())
+			if (a.getKey().equals(agentId))
+				return a.getValue();
+		return null;
 	}
 
 }

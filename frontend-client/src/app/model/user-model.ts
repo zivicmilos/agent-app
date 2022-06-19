@@ -1,9 +1,9 @@
-import { Host } from "./host-model";
+import { AgentCenter } from "./agent-center-model";
 
 export class User {
     constructor(
       public username: string='',
       public password: string='',
-      public host: Host = new Host()
+      public agentCenter: AgentCenter = new AgentCenter()
     ) {}
   }

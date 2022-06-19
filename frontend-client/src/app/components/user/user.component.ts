@@ -2,7 +2,7 @@ import { DatePipe } from '@angular/common';
 import { Component, Input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
-import { Host } from 'src/app/model/host-model';
+import { AgentCenter } from 'src/app/model/agent-center-model';
 import { UserMessage } from 'src/app/model/user-message-model';
 import { User } from 'src/app/model/user-model';
 import { UserService } from 'src/app/services/user.service';
@@ -47,7 +47,7 @@ export class UserComponent implements OnInit {
         data[1].split("|").forEach((user: string) => {
           if (user) {
             let userData = user.split(",");
-            this.users.push(new User(userData[0], userData[1], new Host(userData[2], userData[3])));
+            this.users.push(new User(userData[0], userData[1], new AgentCenter(userData[2], userData[3])));
           }
         });
       }
@@ -56,7 +56,7 @@ export class UserComponent implements OnInit {
         data[1].split("|").forEach((user: string) => {
           if (user) {
             let userData = user.split(",");
-            this.loggedinUsers.push(new User(userData[0], userData[1], new Host(userData[2], userData[3])));
+            this.loggedinUsers.push(new User(userData[0], userData[1], new AgentCenter(userData[2], userData[3])));
           }
         });
       }

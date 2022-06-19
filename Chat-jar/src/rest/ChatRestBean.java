@@ -1,11 +1,17 @@
 package rest;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.Path;
 
-import messagemanager.AgentMessage;
+import agents.AID;
+import agents.AgentType;
+import messagemanager.ACLMessage;
 import messagemanager.MessageManagerRemote;
+import models.AgentCenter;
 import models.User;
 import models.UserMessageDTO;
 
@@ -19,8 +25,12 @@ public class ChatRestBean implements ChatRest {
 	
 	@Override
 	public void register(User user) {
-		AgentMessage message = new AgentMessage();
-		message.userArgs.put("receiver", "chat");
+		ACLMessage message = new ACLMessage();
+		try {
+			message.userArgs.put("receiver", new AID("chat", new AgentCenter(InetAddress.getLocalHost().getHostName(), InetAddress.getLocalHost().getHostAddress()), new AgentType("chat")));
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+		}
 		message.userArgs.put("command", "REGISTER");
 		message.userArgs.put("username", user.getUsername());
 		message.userArgs.put("password", user.getPassword());
@@ -39,8 +49,12 @@ public class ChatRestBean implements ChatRest {
 
 	@Override
 	public void login(User user) {
-		AgentMessage message = new AgentMessage();
-		message.userArgs.put("receiver", "chat");
+		ACLMessage message = new ACLMessage();
+		try {
+			message.userArgs.put("receiver", new AID("chat", new AgentCenter(InetAddress.getLocalHost().getHostName(), InetAddress.getLocalHost().getHostAddress()), new AgentType("chat")));
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+		}
 		message.userArgs.put("command", "LOG_IN");
 		message.userArgs.put("username", user.getUsername());
 		message.userArgs.put("password", user.getPassword());
@@ -59,8 +73,12 @@ public class ChatRestBean implements ChatRest {
 	
 	@Override
 	public void getRegisteredUsers() {
-		AgentMessage message = new AgentMessage();
-		message.userArgs.put("receiver", "chat");
+		ACLMessage message = new ACLMessage();
+		try {
+			message.userArgs.put("receiver", new AID("chat", new AgentCenter(InetAddress.getLocalHost().getHostName(), InetAddress.getLocalHost().getHostAddress()), new AgentType("chat")));
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+		}
 		message.userArgs.put("command", "GET_REGISTERED");
 		
 		messageManager.post(message);
@@ -68,8 +86,12 @@ public class ChatRestBean implements ChatRest {
 
 	@Override
 	public void getloggedInUsers() {
-		AgentMessage message = new AgentMessage();
-		message.userArgs.put("receiver", "chat");
+		ACLMessage message = new ACLMessage();
+		try {
+			message.userArgs.put("receiver", new AID("chat", new AgentCenter(InetAddress.getLocalHost().getHostName(), InetAddress.getLocalHost().getHostAddress()), new AgentType("chat")));
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+		}
 		message.userArgs.put("command", "GET_LOGGEDIN");
 		
 		messageManager.post(message);
@@ -77,8 +99,12 @@ public class ChatRestBean implements ChatRest {
 	
 	@Override
 	public void logoutUser(String user) {
-		AgentMessage message = new AgentMessage();
-		message.userArgs.put("receiver", user);
+		ACLMessage message = new ACLMessage();
+		try {
+			message.userArgs.put("receiver", new AID(user, new AgentCenter(InetAddress.getLocalHost().getHostName(), InetAddress.getLocalHost().getHostAddress()), new AgentType("user")));
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+		}
 		message.userArgs.put("command", "LOGOUT");
 		message.userArgs.put("username", user);
 		
@@ -96,8 +122,12 @@ public class ChatRestBean implements ChatRest {
 
 	@Override
 	public void getMessages(String user) {
-		AgentMessage message = new AgentMessage();
-		message.userArgs.put("receiver", "chat");
+		ACLMessage message = new ACLMessage();
+		try {
+			message.userArgs.put("receiver", new AID("chat", new AgentCenter(InetAddress.getLocalHost().getHostName(), InetAddress.getLocalHost().getHostAddress()), new AgentType("chat")));
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+		}
 		message.userArgs.put("command", "GET_MESSAGES");
 		message.userArgs.put("username", user);
 		
@@ -106,8 +136,12 @@ public class ChatRestBean implements ChatRest {
 
 	@Override
 	public void send(UserMessageDTO dto) {
-		AgentMessage message = new AgentMessage();
-		message.userArgs.put("receiver", dto.getSender());
+		ACLMessage message = new ACLMessage();
+		try {
+			message.userArgs.put("receiver", new AID(dto.getSender(), new AgentCenter(InetAddress.getLocalHost().getHostName(), InetAddress.getLocalHost().getHostAddress()), new AgentType("user")));
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+		}
 		message.userArgs.put("command", "SEND_MESSAGE");
 		message.userArgs.put("messageSender", dto.getSender());
 		message.userArgs.put("messageReceiver", dto.getReceiver());
@@ -130,8 +164,12 @@ public class ChatRestBean implements ChatRest {
 
 	@Override
 	public void sendToAll(UserMessageDTO dto) {
-		AgentMessage message = new AgentMessage();
-		message.userArgs.put("receiver", dto.getSender());
+		ACLMessage message = new ACLMessage();
+		try {
+			message.userArgs.put("receiver", new AID(dto.getSender(), new AgentCenter(InetAddress.getLocalHost().getHostName(), InetAddress.getLocalHost().getHostAddress()), new AgentType("user")));
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+		}
 		message.userArgs.put("command", "SEND_MESSAGE_TO_ALL");
 		message.userArgs.put("messageSender", dto.getSender());
 		message.userArgs.put("messageSubject", dto.getSubject());

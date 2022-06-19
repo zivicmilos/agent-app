@@ -11,7 +11,7 @@ import java.util.Map;
 import javax.ejb.LocalBean;
 import javax.ejb.Stateful;
 
-import models.Host;
+import models.AgentCenter;
 import models.User;
 import models.UserMessage;
 
@@ -39,7 +39,7 @@ public class ChatManagerBean implements ChatManagerRemote, ChatManagerLocal {
 	@Override
 	public boolean register(User user) {
 		try {
-			user.setHost(new Host(InetAddress.getLocalHost().getHostName(), InetAddress.getLocalHost().getHostAddress()));
+			user.setAgentCenter(new AgentCenter(InetAddress.getLocalHost().getHostName(), InetAddress.getLocalHost().getHostAddress()));
 		} catch (UnknownHostException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
@@ -61,7 +61,7 @@ public class ChatManagerBean implements ChatManagerRemote, ChatManagerLocal {
 		boolean exists = registered.stream().anyMatch(u->u.getUsername().equals(username) && u.getPassword().equals(password));
 		if(exists) {
 			User user = registered.stream().filter(u -> u.getUsername().equals(username)).findFirst().orElse(null);
-			loggedIn.add(new User(username, password, new Host(user.getHost().getAlias(), user.getHost().getAddress())));
+			loggedIn.add(new User(username, password, new AgentCenter(user.getAgentCenter().getAlias(), user.getAgentCenter().getAddress())));
 		}
 		return exists;
 	}

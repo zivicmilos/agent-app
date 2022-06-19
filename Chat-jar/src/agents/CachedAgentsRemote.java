@@ -4,6 +4,6 @@ import java.util.HashMap;
 
 public interface CachedAgentsRemote {
 
-	public HashMap<String, Agent> getRunningAgents();
-	public void addRunningAgent(String key, Agent agent);
+	public HashMap<AID, IAgent> getRunningAgents();
+	public void addRunningAgent(AID key, IAgent agent);
 }

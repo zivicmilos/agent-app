@@ -10,7 +10,8 @@ public class User implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private String username;
 	private String password;
-	private Host host;
+	private AgentCenter agentCenter;
+	
 
 	public String getUsername() {
 		return username;
@@ -28,12 +29,12 @@ public class User implements Serializable {
 		this.password = password;
 	}
 
-	public Host getHost() {
-		return host;
+	public AgentCenter getAgentCenter() {
+		return agentCenter;
 	}
 	
-	public void setHost(Host host) {
-		this.host = host;
+	public void setAgentCenter(AgentCenter agentCenter) {
+		this.agentCenter = agentCenter;
 	}
 	
 	public User(String username) {
@@ -45,17 +46,17 @@ public class User implements Serializable {
 		this.password = password;
 	}
 	
-	public User(String username, String password, Host host) {
+	public User(String username, String password, AgentCenter agentCenter) {
 		this.username = username;
 		this.password = password;
-		this.host = host;
+		this.agentCenter = agentCenter;
 	}
 	
 	public User() {}
 
 	@Override
 	public String toString() {
-		return username + "," + password + "," + host.getAlias() + "," + host.getAddress();
+		return username + "," + password + "," + agentCenter.getAlias() + "," + agentCenter.getAddress();
 	}
 	
 }
