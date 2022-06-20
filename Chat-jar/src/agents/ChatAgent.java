@@ -116,7 +116,10 @@ public class ChatAgent extends Agent {
 			}
 			if (!(message.performative == Performative.GET_REGISTERED || message.performative == Performative.GET_LOGGEDIN || message.performative == Performative.GET_MESSAGES)) {
 				System.out.println(response);
-				ws.onMessage((String) message.userArgs.get("username"), response);
+				if (message.sender == null)
+					ws.onMessage((String) message.userArgs.get("username"), response);
+				else
+					ws.onMessage(message.sender.getName(), response);
 			}
 		}
 	}

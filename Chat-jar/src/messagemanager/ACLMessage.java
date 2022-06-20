@@ -16,7 +16,7 @@ public class ACLMessage implements Serializable {
 	public AID replyTo;
 	public String content;
 	public Serializable contentObj;
-	public Map<String, Serializable> userArgs;
+	public Map<String, Object> userArgs;
 	public String language;
 	public String encoding;
 	public String ontology;
@@ -31,7 +31,7 @@ public class ACLMessage implements Serializable {
 		this.userArgs = new HashMap<>();
 	}
 	public ACLMessage(Performative performative, AID sender, List<AID> receivers, AID replyTo, String content,
-			Serializable contentObj, Map<String, Serializable> userArgs, String language, String encoding,
+			Serializable contentObj, Map<String, Object> userArgs, String language, String encoding,
 			String ontology, String protocol, String conversationId, String replyWith, String inReplyTo, long replyBy) {
 		super();
 		this.performative = performative;

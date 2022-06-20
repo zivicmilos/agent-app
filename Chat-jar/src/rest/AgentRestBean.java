@@ -22,11 +22,11 @@ import ws.WSChat;
 public class AgentRestBean implements AgentRest{
 	
 	@EJB 
-	AgentManagerRemote agentManager;
+	private AgentManagerRemote agentManager;
 	@EJB 
-	CachedAgentsRemote cachedAgents;
+	private CachedAgentsRemote cachedAgents;
 	@EJB 
-	ChatManagerRemote chatManager;
+	private ChatManagerRemote chatManager;
 	@EJB
 	private WSChat ws;
 	

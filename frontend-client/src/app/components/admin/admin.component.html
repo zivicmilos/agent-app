@@ -61,3 +61,46 @@
         </div>
     </div>
 </div>
+
+<br>
+<div>
+    <button type="button" class="btn btn-primary btn-block mb-4" (click)="getPerformatives()">List of performatives</button>
+</div>
+<div>
+    <table *ngIf="performatives?.length">
+        <thead>
+            <tr>
+                <th>Performative</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let p of performatives">
+                <td>{{p}}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+<br>
+<div>
+    <div class="row">
+        <div class="col-sm">
+            <input name="performative" type="text" id="performative" placeholder="Performative" [(ngModel)]="aclMessage.performative" />
+        </div>
+        <div class="col-sm">
+            <input name="receiverName" type="text" id="receiverName" placeholder="Receiver name" [(ngModel)]="aclMessage.receivers[0].name" />
+        </div>
+        <div class="col-sm">
+            <input name="acName" type="text" id="acName" placeholder="Receiver agent center name" [(ngModel)]="aclMessage.receivers[0].agentCenter.alias" />
+        </div>
+        <div class="col-sm">
+            <input name="receiverType" type="text" id="receiverType" placeholder="Receiver type" [(ngModel)]="aclMessage.receivers[0].type.name" />
+        </div>
+        <div class="col-sm">
+            <input name="args" type="text" id="args" placeholder="Arguments" [(ngModel)]="userArgs" />
+        </div>
+        <div class="col-sm">
+            <button type="button" class="btn btn-primary btn-block mb-4" (click)="sendMessage()">Send message</button>
+        </div>
+    </div>
+</div>

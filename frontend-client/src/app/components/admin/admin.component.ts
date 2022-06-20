@@ -1,11 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
+import { ACLMessage } from 'src/app/model/acl-message-model';
 import { AgentCenter } from 'src/app/model/agent-center-model';
 import { AgentType } from 'src/app/model/agent-type-model';
 import { AID } from 'src/app/model/aid-model';
 import { User } from 'src/app/model/user-model';
 import { AgentService } from 'src/app/services/agent.service';
+import { MessageService } from 'src/app/services/message.service';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -17,14 +19,18 @@ export class AdminComponent implements OnInit {
   connection: WebSocket = new WebSocket("ws://localhost:8080/Chat-war/ws/chat");
   currentUser: User = new User();
   agentTypes: AgentType[] = [];
+  performatives: String[] = [];
   runningAgents: AID[] = [];
   name: String = '';
   type: String = '';
+  aclMessage: ACLMessage = new ACLMessage();
+  userArgs: String = '';
 
   constructor(private userService: UserService, private agentService: AgentService,
-    private toastr: ToastrService, private router: Router) { }
+    private toastr: ToastrService, private router: Router, private messageService: MessageService) { }
 
   ngOnInit(): void {
+    this.aclMessage.receivers.push(new AID());
     this.currentUser = this.userService.getCurrentUser();
     this.connection = new WebSocket("ws://localhost:8080/Chat-war/ws/" + this.currentUser.username);
     console.log("ws://localhost:8080/Chat-war/ws/" + this.currentUser.username);
@@ -61,6 +67,15 @@ export class AdminComponent implements OnInit {
           }
         });
       }
+      else if (data[0] === "PERFORMATIVES") {
+        this.performatives = [];
+        data[1].split("|").forEach((p: string) => {
+          if (p) {
+            let pData = p.split(",");
+            this.performatives.push(pData[0]);
+          }
+        });
+      }
       else {
         this.toastr.success(data[1]);
       }
@@ -89,5 +104,20 @@ export class AdminComponent implements OnInit {
 
   stopAgent(aid: AID) {
     this.agentService.stopAgent(aid);
+  }
+
+  getPerformatives() {
+    this.messageService.getPerformatives();
+  }
+
+  sendMessage() {
+    this.aclMessage.sender.name = this.currentUser.username;
+    this.userArgs.split("|").forEach((ua: string) => {
+      if (ua) {
+        let uaData = ua.split(",");
+        this.aclMessage.userArgs[uaData[0]] = uaData[1];
+      }
+    });
+    this.messageService.sendMessage(this.aclMessage);
   }
 }
