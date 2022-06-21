@@ -39,7 +39,7 @@ public class WSChat {
 		try {
 			AID aid = new AID(username, new AgentCenter(InetAddress.getLocalHost().getHostName(), InetAddress.getLocalHost().getHostAddress()) , new AgentType("user"));
 			AID aid2 = new AID(username, new AgentCenter(InetAddress.getLocalHost().getHostName(), InetAddress.getLocalHost().getHostAddress()), new AgentType("chat"));
-			if (!aid2.equals(new AID("chat", new AgentCenter(InetAddress.getLocalHost().getHostName(), InetAddress.getLocalHost().getHostAddress()) , new AgentType("chat"))) && agentManager.getAgentById(aid) == null) {
+			if (!aid2.equals(new AID("chat", new AgentCenter(InetAddress.getLocalHost().getHostName(), InetAddress.getLocalHost().getHostAddress()), new AgentType("chat"))) && agentManager.getAgentById(aid) == null) {
 				agentManager.startAgent(JNDILookup.UserAgentLookup, aid);
 				agentRest.getRunningAgents();
 			}

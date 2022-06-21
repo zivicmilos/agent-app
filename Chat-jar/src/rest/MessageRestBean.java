@@ -6,6 +6,7 @@ import javax.ws.rs.Path;
 
 import messagemanager.ACLMessage;
 import messagemanager.MessageManagerRemote;
+import messagemanager.Performative;
 import ws.WSChat;
 
 @Stateless
@@ -14,6 +15,8 @@ public class MessageRestBean implements MessageRest {
 	
 	@EJB
 	private MessageManagerRemote messageManager;
+	@EJB 
+	private ChatRest chatRest;
 	@EJB
 	private WSChat ws;
 
@@ -33,6 +36,15 @@ public class MessageRestBean implements MessageRest {
 		messageManager.post(message);
 		
 		ws.onMessage(message.sender.getName(), "MESSAGE_SENT! Message sent: Yes!");
+		
+		if (message.performative == Performative.REGISTER)
+			chatRest.getRegisteredUsers();
+		else if (message.performative == Performative.LOG_IN || message.performative == Performative.LOGOUT)
+			chatRest.getloggedInUsers();
+		else if (message.performative == Performative.SEND_MESSAGE)
+			chatRest.getMessages((String)message.userArgs.get("messageReceiver"));
+		else if (message.performative == Performative.SEND_MESSAGE_TO_ALL)
+			chatRest.getMessages("all");
 	}
 
 }

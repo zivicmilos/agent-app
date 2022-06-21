@@ -22,6 +22,8 @@ public interface ChatManagerRemote {
 	
 	List<User> getAdmins();
 	
+	List<User> getLoggedInAdmins();
+	
 	public boolean logout(String username);
 	
 	public List<UserMessage> getMessages(String username);

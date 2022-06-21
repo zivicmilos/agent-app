@@ -37,7 +37,7 @@ public class AgentRestBean implements AgentRest{
 		for (AgentType at : agentManager.getAgentTypes()) {
 			response += at.getName() + "|";
 		}
-		for (User u : chatManager.getAdmins()) {	
+		for (User u : chatManager.getLoggedInAdmins()) {	
 			ws.onMessage(u.getUsername(), response);
 		}
 	}
@@ -60,7 +60,7 @@ public class AgentRestBean implements AgentRest{
 					agentId.getAgentCenter().getAlias() + "," + agentId.getType().getName() + "|";
 		}
 		
-		for (User u : chatManager.getAdmins()) {	
+		for (User u : chatManager.getLoggedInAdmins()) {	
 			ws.onMessage(u.getUsername(), response);
 		}
 		
